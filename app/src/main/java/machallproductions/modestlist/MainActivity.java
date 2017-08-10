@@ -1,5 +1,6 @@
 package machallproductions.modestlist;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter<String> aToDoAdapter;
     ListView lvItems;
     EditText etEditText;
+    private final int REQUEST_CODE_EDIT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,23 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, EditScreen.class);
+                intent.putExtra("returnText", lvItems.getItemAtPosition(position).toString());
+                intent.putExtra("position", position);
+                startActivityForResult(intent, REQUEST_CODE_EDIT);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)  {
+        int position = data.getIntExtra("position", -1);
+        String txt = data.getStringExtra("returnText");
+        toDoItems.set(position, txt); //error handling could be better
+        aToDoAdapter.notifyDataSetChanged();
+        writeItems();
     }
 
     public void populateArrayItems() {
