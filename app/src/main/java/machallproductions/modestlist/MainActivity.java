@@ -2,6 +2,7 @@ package machallproductions.modestlist;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,7 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EditDialogFragment.OnFragmentInteractionListener {
 
     ArrayList<String> toDoItems;
     ArrayAdapter<String> aToDoAdapter;
@@ -42,10 +43,14 @@ public class MainActivity extends AppCompatActivity {
         });
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, EditScreen.class);
-                intent.putExtra("returnText", lvItems.getItemAtPosition(position).toString());
-                intent.putExtra("position", position);
-                startActivityForResult(intent, REQUEST_CODE_EDIT);
+                FragmentManager fm = getSupportFragmentManager();
+                String text = lvItems.getItemAtPosition(position).toString();
+                EditDialogFragment editDialog = EditDialogFragment.newInstance(text, position);
+                editDialog.show(fm, "editText_field");
+                //Intent intent = new Intent(MainActivity.this, EditScreen.class);
+                //intent.putExtra("returnText", lvItems.getItemAtPosition(position).toString());
+                //intent.putExtra("position", position);
+                //startActivityForResult(intent, REQUEST_CODE_EDIT);
             }
         });
     }
@@ -90,4 +95,11 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+    public void onFragmentInteraction(String text, int position) {
+        toDoItems.set(position, text); //error handling could be better
+        aToDoAdapter.notifyDataSetChanged();
+        writeItems();
+    }
+
 }
