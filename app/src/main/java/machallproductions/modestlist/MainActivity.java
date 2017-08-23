@@ -47,10 +47,6 @@ public class MainActivity extends AppCompatActivity implements EditDialogFragmen
                 String text = lvItems.getItemAtPosition(position).toString();
                 EditDialogFragment editDialog = EditDialogFragment.newInstance(text, position);
                 editDialog.show(fm, "editText_field");
-                //Intent intent = new Intent(MainActivity.this, EditScreen.class);
-                //intent.putExtra("returnText", lvItems.getItemAtPosition(position).toString());
-                //intent.putExtra("position", position);
-                //startActivityForResult(intent, REQUEST_CODE_EDIT);
             }
         });
     }

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,8 +42,8 @@ public class EditDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit, container, false);
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        return inflater.inflate(R.layout.fragment_edit, container, true);
     }
 
     @Override
@@ -69,6 +70,12 @@ public class EditDialogFragment extends DialogFragment {
             mListener.onFragmentInteraction(text, position);
         }
         dismiss();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
     @Override
